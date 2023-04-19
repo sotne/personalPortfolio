@@ -1,31 +1,46 @@
-import { NavBar, Container } from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import iconlogo from '../assets/img/neyt-soto-high-resolution-logo-black-on-transparent-background.png';
+
 
 export const NavBar = () => {
+    const [activeLink, setActiveLink] = useState('home');
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect( () => {
+        const onScroll = () => {
+            if (window.scrollY > 50) {
+                setScrolled(true)
+            } else {
+                setScrolled(false)
+            }
+        }
+
+        window.addEventListener('scroll', onScroll);
+
+        return () => window.removeEventListener('scroll', onScroll)
+    }, []);
+
+   const onUpdateActiveLink = (value) => {
+    setActiveLink(value)
+    }
+
+
     return (
-        <Navbar  expand="lg">
-      <Container>
-        <Navbar.Brand href="#home">
-            <img src={}
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
+    <Navbar  expand="lg" className={scrolled? 'scrolled': ''}>
+        <Container>
+            <Navbar.Brand href="#home">
+                <img src={iconlogo} alt="logo"/>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+                <Nav.Link href="#home"className={activeLink === 'home' ? 'active navbar-link' : 'navbar-link'} onClick={() => onUpdateActiveLink('home')}>Home</Nav.Link>
+                <Nav.Link href="#skills"className={activeLink === 'skills' ? 'active navbar-link' : 'navbar-link'} onClick={() => onUpdateActiveLink('skills')}>Skills</Nav.Link>
+                <Nav.Link href="#projects"className={activeLink === 'projects' ? 'active navbar-link' : 'navbar-link'} onClick={() => onUpdateActiveLink('projects')}>Projects</Nav.Link>
+            </Nav>
+            </Navbar.Collapse>
+        </Container>
     </Navbar>
     )
 }
